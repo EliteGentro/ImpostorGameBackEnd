@@ -7,7 +7,7 @@ A NestJS backend for the Impostor Word Game, a mobile-first social deduction gam
 - **RESTful API**: Endpoints for categories and random word generation
 - **TypeORM Integration**: Migration-based schema management with PostgreSQL
 - **Supabase Database**: Managed PostgreSQL instance with connection pooling
-- **CORS Enabled**: Configured for frontend integration
+- **CORS Enabled**: Configured for frontend integration with flexible origin handling
 - **Validation**: Global validation pipes for request data
 - **Seeding**: Database seeding with sample categories and words
 
@@ -170,7 +170,29 @@ GET /api/words/random?categoryIds=119b6a99-2c94-4bc7-9127-40b1e644cb76&count=5
 ]
 ```
 
-## Database Schema
+## CORS Configuration
+
+The backend is configured with flexible CORS settings to support both development and production environments:
+
+- **Development**: Allows all localhost origins (ports 3000, 5173, 4173, etc.)
+- **Production**: Allows your specified domain and Vercel deployments
+- **Methods**: GET, POST, PUT, DELETE, PATCH, OPTIONS
+- **Headers**: Content-Type, Authorization, Accept
+- **Credentials**: Enabled for cookie/auth support
+
+Currently allowed origins:
+- All localhost URLs (development)
+- `https://impostor-game-front-end.vercel.app` (Vercel deployment)
+- Custom domain (update regex in `main.ts`)
+
+To add more production domains, update the CORS configuration in `src/main.ts`:
+
+```typescript
+// Add your domain
+if (origin === 'https://your-production-domain.com') {
+  return callback(null, true);
+}
+```
 
 ### Categories Table
 ```sql
